@@ -72,6 +72,7 @@ function runInFoldersDelete(folder) {
 //runInFoldersDelete(root + "oooo")
 
 function deletes(paht) {
+    paht = root + paht
     if (fs.existsSync(paht)) { //if file exists
 
         if (fs.statSync(paht).isDirectory()) {//if folder
@@ -81,6 +82,7 @@ function deletes(paht) {
         else {
             fs.unlinkSync(paht)//delete files
             console.log("file deleted");
+            
         }
     }
     else {
@@ -88,7 +90,7 @@ function deletes(paht) {
         throw "file not exsist"
     }
 }
-//deletes(root + "a1")
+//deletes("a1")
 
 function rename(file, to) {//transfer file to new loc ||  file rename 
     file = root + file

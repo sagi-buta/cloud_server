@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const upload = multer({ dest: 'uploads' });
+const upload = require('../BL/middlewares/multer');
 const { readfile, readfolderfils, creatfile, creatfolder, deletes, rename, cut, root } = require('../BL/fs.services');
 
 // router.get('/', async (req, res) => {
@@ -22,7 +21,7 @@ const { readfile, readfolderfils, creatfile, creatfolder, deletes, rename, cut, 
 //         res.status(400).send(error.message)
 //     }
 // })
-router.post('/upload', upload.single("upfile"), (req, res) => {
+router.post('/upload', upload.single("upfile"), async (req, res) => {
     let file = req.file;
     let dir = req.query.dir;
     try {
@@ -33,15 +32,15 @@ router.post('/upload', upload.single("upfile"), (req, res) => {
         res.status(400).send(error)
     }
 })
-// router.delete("/:id", async (req, res) => {
-//     try {
-//         let data = await deleteFun(req.params.id)
-//         res.send(data)
-//     } catch (error) {
-//         console.log(error);
-//         res.status(400).send(error.message)
-//     }
-// })
+router.delete("/", async (req, res) => {
+    try {
+        deletes(req.query.dir);
+        res.send(readfolderfils(req.query.dir));
+    } catch (error) {
+        console.log(error);
+        res.status(400).send(error.message)
+    }
+})
 // router.put("/:id", async (req, res) => {
 //     try {
 //         let data = await updateFun(req.params.id, req.body)
