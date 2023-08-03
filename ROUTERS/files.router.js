@@ -11,22 +11,25 @@ let idUserNow
 //     } catch (error) {
 //         console.log(error);
 //         res.send(error);
-//     }
+//
 // });
-// router.get("/:id", async (req, res) => {
-//     try {
-//         let data = await readFun({ _id: req.params.id })
-//         res.send(data)
-//     } catch (error) {
-//         console.log(error);
-//         res.status(400).send(error.message)
-//     }
-// })
+router.get("/", async (req, res) => {
+    let id = req.query.id
+    let dir = req.query.dir
+    setRoot(id, dir)
+    try {
+        let file = readfile(dir)
+        res.send(file)
+    } catch (error) {
+        console.log(error);
+        res.status(400).send(error.message)
+    }
+})
 router.post('/upload', upload.single("upfile"), async (req, res) => {
     let formDataFile = req.file;//new file
     idUserNow = `${req.query.id}`//folder driveuser = the correct _id of usernow
-    const dir = `${req.query.dir}`//the correct  folder nedded
-    setRoot(idUserNow,dir)
+    const dir = `${req.query.dir}`//the correct folder nedded
+    setRoot(idUserNow, dir)
     try {
         cut(formDataFile.path, dir + "/" + Date.now() + formDataFile.originalname);
         res.send(readfolderfils(dir));
