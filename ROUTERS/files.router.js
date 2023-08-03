@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const upload = multer({ dest: 'uploads' });
-const { readfile, readfolderfils, creatfile, creatfolder, deletes, rename, cut, root } = require('../BL/fs.services');
+const upload = require('../BL/middlewares/multer');
+const { readfile, readfolderfils, creatfile, creatfolder, deletes, rename, cut, setRoot } = require('../BL/fs.services');
 
+let idUserNow
 // router.get('/', async (req, res) => {
 //     try {
 //         let data = await readFun();
@@ -22,26 +22,28 @@ const { readfile, readfolderfils, creatfile, creatfolder, deletes, rename, cut, 
 //         res.status(400).send(error.message)
 //     }
 // })
-router.post('/upload', upload.single("upfile"), (req, res) => {
-    let file = req.file;
-    let dir = req.query.dir;
+router.post('/upload', upload.single("upfile"), async (req, res) => {
+    let formDataFile = req.file;//new file
+    idUserNow = `${req.query.id}`//folder driveuser = the correct _id of usernow
+    const dir = `${req.query.dir}`//the correct  folder nedded
+    setRoot(idUserNow,dir)
     try {
-        cut(file.path, dir + "/" + Date.now() + file.originalname);
+        cut(formDataFile.path, dir + "/" + Date.now() + formDataFile.originalname);
         res.send(readfolderfils(dir));
     } catch (error) {
         console.log(error);
         res.status(400).send(error)
     }
 })
-// router.delete("/:id", async (req, res) => {
-//     try {
-//         let data = await deleteFun(req.params.id)
-//         res.send(data)
-//     } catch (error) {
-//         console.log(error);
-//         res.status(400).send(error.message)
-//     }
-// })
+router.delete("/", async (req, res) => {
+    try {
+        deletes(req.query.dir);
+        res.send(readfolderfils(req.query.dir));
+    } catch (error) {
+        console.log(error);
+        res.status(400).send(error.message)
+    }
+})
 // router.put("/:id", async (req, res) => {
 //     try {
 //         let data = await updateFun(req.params.id, req.body)
@@ -51,5 +53,6 @@ router.post('/upload', upload.single("upfile"), (req, res) => {
 //         res.status(400).send(error.message)
 //     }
 // })
+
 
 module.exports = router;
