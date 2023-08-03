@@ -1,27 +1,30 @@
 const fs = require('fs');
-const { log } = require('console');
 // const { arrayBuffer } = require('node:stream/consumers');
 // const { run } = require('node:test');
 
-let root
+let root = `./root/`
 //let userNow
 
 const setRoot = (id, dir) => {
     id == dir ? root = `./root/` : root = `./root/${id}/`
     //userNow = id
-
 }
 
 function readfile(paht) {
+    paht = root + paht
     if (fs.existsSync(paht)) {
-        let file = fs.readFileSync(paht, { encoding: 'utf8' });
-        return file
+        // let file = fs.readFileSync(paht, { encoding: 'utf8' });
+        let file = fs.readFileSync(paht);
+        console.log(file);
+        return file// returns the info inside of the file
     }
     else {
-        logger.log("file not exsist")
+        console.log("file not exsist")
         throw "File not found"
     }
 }
+// readfile("a1.js")
+
 
 function readfolderfils(folder) {
     const paht = root + folder
