@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const upload = require('../BL/middlewares/multer');
-const { readfile, readfolderfils, creatfile, creatfolder, deletes, rename, cut, setRoot } = require('../BL/fs.services');
+const {downloadFile, readfile, readfolderfils, creatfile, creatfolder, deletes, rename, cut, setRoot } = require('../BL/fs.services');
 
 let idUserNow
 // router.get('/', async (req, res) => {
@@ -44,6 +44,15 @@ router.delete("/", async (req, res) => {
         res.status(400).send(error.message)
     }
 })
+
+router.get('/download',(req, res) => {
+    res.set('Content-Type', 'image/jpeg')
+    res.download(`./${req.query.dir}/${req.query.fileName}`)
+})
+
+
+
+
 // router.put("/:id", async (req, res) => {
 //     try {
 //         let data = await updateFun(req.params.id, req.body)

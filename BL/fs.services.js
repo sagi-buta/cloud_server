@@ -7,9 +7,8 @@ let root
 //let userNow
 
 const setRoot = (id, dir) => {
-    id == dir ? root = `./root/` : root = `./root/${id}/`
+    id == dir ? root = `./root/`: root = `./root/${id}/`
     //userNow = id
-
 }
 
 function readfile(paht) {
@@ -150,7 +149,10 @@ function cut(file, loc) {
         throw "file not exsist"
     }
 }
+const downloadFile = (dir,fileName)=>{
+    return `${dir}/${fileName}`
+}
 //cut('vv', 'a2/vv')
 
 
-module.exports = { readfile, readfolderfils, creatfile, creatfolder, deletes, rename, cut, setRoot }
+module.exports = { downloadFile,readfile, readfolderfils, creatfile, creatfolder, deletes, rename, cut, setRoot }
