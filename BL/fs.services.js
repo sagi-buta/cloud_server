@@ -1,8 +1,16 @@
-const { log } = require('console');
 const fs = require('fs');
+const { log } = require('console');
 // const { arrayBuffer } = require('node:stream/consumers');
 // const { run } = require('node:test');
-const root = './root/'
+
+let root
+//let userNow
+
+const setRoot = (id, dir) => {
+    id == dir ? root = `./root/` : root = `./root/${id}/`
+    //userNow = id
+
+}
 
 function readfile(paht) {
     if (fs.existsSync(paht)) {
@@ -82,7 +90,7 @@ function deletes(paht) {
         else {
             fs.unlinkSync(paht)//delete files
             console.log("file deleted");
-            
+
         }
     }
     else {
@@ -145,4 +153,4 @@ function cut(file, loc) {
 //cut('vv', 'a2/vv')
 
 
-module.exports = { readfile, readfolderfils, creatfile, creatfolder, deletes, rename, cut, root }
+module.exports = { readfile, readfolderfils, creatfile, creatfolder, deletes, rename, cut, setRoot }
