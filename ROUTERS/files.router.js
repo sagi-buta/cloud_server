@@ -49,8 +49,9 @@ router.delete("/", async (req, res) => {
 })
 
 router.get('/download',(req, res) => {
-    res.set('Content-Type', 'image/jpeg')
-    res.download(`./${req.query.dir}/${req.query.fileName}`)
+    // res.set('Content-Type', 'image/jpeg')
+    res.set('Content-Type', 'application/pdf')
+    res.download(`./${req.query.dir}`)
 })
 
 
