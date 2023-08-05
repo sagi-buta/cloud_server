@@ -6,7 +6,7 @@ let root = `./root/`
 //let userNow
 
 const setRoot = (id, dir) => {
-    id == dir ? root = `./root/`: root = `./root/${id}/`
+    id == dir ? root = `./root/` : root = `./root/${id}/`
     //userNow = id
 }
 
@@ -15,7 +15,7 @@ function readfile(paht) {
     if (fs.existsSync(paht)) {
         // let file = fs.readFileSync(paht, { encoding: 'utf8' });
         let file = fs.readFileSync(paht);
-        console.log(file);
+        // console.log(file);
         return file// returns the info inside of the file
     }
     else {
@@ -153,10 +153,10 @@ function cut(file, loc) {
         throw "file not exsist"
     }
 }
-const downloadFile = (dir,fileName)=>{
+const downloadFile = (dir, fileName) => {
     return `${dir}/${fileName}`
 }
 //cut('vv', 'a2/vv')
 
 
-module.exports = { downloadFile,readfile, readfolderfils, creatfile, creatfolder, deletes, rename, cut, setRoot }
+module.exports = { downloadFile, readfile, readfolderfils, creatfile, creatfolder, deletes, rename, cut, setRoot }
