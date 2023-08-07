@@ -3,40 +3,60 @@ const express = require('express');
 const router = express.Router();
 const upload = require('../BL/middlewares/multer');
 const { downloadFile, readfile, readfolderfils, creatfile, creatfolder, deletes, rename, cut, setRoot } = require('../BL/fs.services');
-const mime = require('mime-types')
+const mime = require('mime-types');
 
-let idUserNow
-// router.get('/', async (req, res) => {
-//     try {
-//         let data = await readFun();
-//         res.send(data);
-//     } catch (error) {
-//         console.log(error);
-//         res.send(error);
-//
-// });
+
+//read all files in folder return array        
+//http://localhost:8000/files/?id=some_id&dir=some_id/folder/...<-nesessary full path with id in dir--
 router.get("/", async (req, res) => {
     let id = req.query.id
     let dir = req.query.dir
-    let fileType = mime.lookup(`./root/${id}/${dir}`);
-    console.log(fileType);
-    setRoot(id, dir)
     try {
-        let File = readfile(dir)
+        setRoot(id, dir)
+        let infArray = readfolderfils(dir)//nesessary full path with id in dir
+        res.send(infArray)
+    } catch (error) {
+        console.log(error);
+        res.status(400).send(error)
+    }
+})
+
+router.put("/rename", async (req, res) => {
+let id = req.query.id
+let dir = req.query.dir
+let dir2 = req.query.dir2
+    try {
+        setRoot(id, dir)
+       let infArray= rename(dir, dir2)
+        res.send(infArray)
+    } catch (error) {
+        console.log(error);
+        res.status(400).send(error)
+    }
+})
+
+//http://localhost:8000/files/?id=some_id&dir=folder/...
+router.get("/one", async (req, res) => {//to show file -or- download.
+    let id = req.query.id
+    let dir = req.query.dir
+    let fileType = mime.lookup(`./root/${dir}`);
+    try {
+        setRoot(id, dir)
+        let File = readfile(dir)//id+dir from client url.
         res.set('Content-Type', `${fileType}`)
         res.send(File)
     } catch (error) {
         console.log(error);
-        res.status(400).send(error.message)
+        res.status(400).send(error)
     }
 })
-router.post('/upload', upload.single("upfile"), async (req, res) => {
+router.post('/upload', upload.single("upfile"), async (req, res) => {//upload a file.
     let formDataFile = req.file;//new file
-    idUserNow = `${req.query.id}`//folder driveuser = the correct _id of usernow
-    const dir = `${req.query.dir}`//the correct folder nedded
-    setRoot(idUserNow, dir)
+    let id = `${req.query.id}`//folder drive user = the correct _id of usernow
+    let dir = `${req.query.dir}`//the correct folder to add
     try {
-        cut(formDataFile.path, dir + "/"  + formDataFile.originalname);
+        setRoot(id, dir)
+        cut(formDataFile.path, dir + "/" + Date.now() + formDataFile.originalname);
         res.send(readfolderfils(dir));
     } catch (error) {
         console.log(error);
@@ -44,12 +64,20 @@ router.post('/upload', upload.single("upfile"), async (req, res) => {
     }
 })
 router.delete("/", async (req, res) => {
+    let id = req.query.id
+    let dir = req.query.dir
     try {
-        deletes(req.query.dir);
-        res.send(readfolderfils(req.query.dir));
+        setRoot(id, dir)
+        deletes(dir) //nesessary full path with id in dir
+        let newdir = dir.split("/")
+        newdir.pop()
+        newdir = newdir.join("/")
+        console.log(dir, newdir);
+        let infArray = readfolderfils(newdir)
+        res.send(infArray)
     } catch (error) {
         console.log(error);
-        res.status(400).send(error.message)
+        res.status(400).send(error)
     }
 })
 

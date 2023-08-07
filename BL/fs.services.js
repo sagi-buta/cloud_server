@@ -6,50 +6,64 @@ let root = `./root/`
 //let userNow
 
 const setRoot = (id, dir) => {
-    id == dir ? root = `./root/` : root = `./root/${id}/`
-    //userNow = id
+    if(!dir)throw "No permission to access"
+    if(!id)throw "No permission to access"
+
 }
 
 function readfile(paht) {
     paht = root + paht
+    console.log(paht);
     if (fs.existsSync(paht)) {
         // let file = fs.readFileSync(paht, { encoding: 'utf8' });
         let file = fs.readFileSync(paht);
-        // console.log(file);
+        console.log("ok",file);
         return file// returns the info inside of the file
     }
     else {
+        console.log(paht);
         console.log("file not exsist")
         throw "File not found"
     }
 }
-// readfile("a1.js")
-
+//readfile("64c912408b5a1420b61a7a0f/notes/1691032364332479497.jpg")
 
 function readfolderfils(folder) {
     const paht = root + folder
     if (fs.existsSync(paht) && fs.statSync(paht).isDirectory()) {
-        let filesArr = fs.readdirSync(paht)
-        console.log(filesArr);
-        return filesArr
-    } else {
-        console.log('folder not exist');
-        throw "folder not exist"
+        let folderArrOrFile = fs.readdirSync(paht)
+        console.log(folderArrOrFile);
+        return folderArrOrFile
+    }
+    // else if (fs.existsSync) {/// optional -??- for show files
+    //     folderArrOrFile= readfile(paht)
+    //     console.log(folderArrOrFile);
+    //     return folderArrOrFile
+    // }
+    else {
+        console.log('folder/file not exist');
+        throw "folder/file not exist"
     }
 }
 //readfolderfils('/a2')
 
+
+
+
 //<={creatfile or folder by location & name
-function creatfile(filenNme, content, loc) {
+function creatfile(loc, filenNme, content) {
     const paht = root + loc + "/" + filenNme;
     fs.writeFileSync(paht, content)//for now only text
 }
-function creatfolder(folderName, loc) {
-    loc = loc ? loc : ""
+function creatfolder(loc, folderName) {
     const paht = root + loc + "/" + folderName;
     if (fs.existsSync(root + loc)) {
         if (!fs.existsSync(paht)) {
             fs.mkdirSync(paht)
+            let stat = fs.statSync(paht)
+            let folderDir = readfolderfils(loc)
+            console.log(stat, folderDir);
+            return ({ stat, folderDir })
         }
         else {
             console.log("folder already exist")
@@ -61,7 +75,10 @@ function creatfolder(folderName, loc) {
         throw "folder not exist"
     }
 }
-//creatfolder("sagi", "a1")
+//creatfolder("64c912408b5a1420b61a7a0f/images", "newsagifolder")
+
+
+
 
 function runInFoldersDelete(folder) {
     let arrInFolder = fs.readdirSync(folder)
@@ -87,13 +104,12 @@ function deletes(paht) {
     if (fs.existsSync(paht)) { //if file exists
 
         if (fs.statSync(paht).isDirectory()) {//if folder
-            runInFoldersDelete(paht)// run the delete fun
+            runInFoldersDelete(paht)// start delete fun
             console.log("folder deleted");
         }
         else {
             fs.unlinkSync(paht)//delete files
             console.log("file deleted");
-
         }
     }
     else {
@@ -101,7 +117,7 @@ function deletes(paht) {
         throw "file not exsist"
     }
 }
-//deletes("a1")
+//deletes("64c912408b5a1420b61a7a0f/pdf_20230725_135033_0000.pdf")
 
 function rename(file, to) {//transfer file to new loc ||  file rename 
     file = root + file
@@ -123,6 +139,7 @@ function rename(file, to) {//transfer file to new loc ||  file rename
             if (!fs.existsSync(to)) {//check if found file wite the same name in folder
 
                 fs.renameSync(file, to)// fun do
+               return readfolderfils(myTo)
             }
             else {
                 console.log("the newname is exsisit, choise a difrent newname");
@@ -135,7 +152,7 @@ function rename(file, to) {//transfer file to new loc ||  file rename
         }
     }
 }
-//rename('a1', '2')
+//rename('64c912408b5a1420b61a7a0f/1691376573743kkk.docx', '64c912408b5a1420b61a7a0f/1691376573743hhhh.docx')
 
 function cut(file, loc) {
     loc = root + loc
@@ -153,10 +170,12 @@ function cut(file, loc) {
         throw "file not exsist"
     }
 }
+//cut('vv', 'a2/vv')
+
 const downloadFile = (dir, fileName) => {
     return `${dir}/${fileName}`
 }
-//cut('vv', 'a2/vv')
+
 
 
 module.exports = { downloadFile, readfile, readfolderfils, creatfile, creatfolder, deletes, rename, cut, setRoot }
