@@ -6,6 +6,11 @@ const usersSchema = new mongoose.Schema(
         email: { type: String, required: true },
         password: { type: String, required: true },
         isActive: { type: Boolean, default: true },
+        token: {
+            type: String,
+            //required: true,
+            default: null
+        },
     }
 )
 

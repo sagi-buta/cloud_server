@@ -2,7 +2,7 @@ const { read, readOne, create, update, deleteOne } = require('../DL/controllers/
 
 
 const readFun = async (filterBy) => {//get all users --OR-- one by id
-    let Data = await filterBy ? readOne({ _id: filterBy }) : read({})
+    let Data = await filterBy ? readOne(filterBy) : read({})
     if (!Data) throw " Data no found"
     return Data
 }
@@ -25,5 +25,11 @@ const deleteFun = async (id) => {//delete user from data
     return Data
 }
 
-module.exports = { createFun, readFun, deleteFun, updateFun }
+// const loginFun = async (filterBy, info) => {
+//     let Data = readOne({email:filterBy})
+//     if (!Data) throw "no data "
+//     return Data
+// }
+
+module.exports = { createFun, readFun, deleteFun, updateFun}
 

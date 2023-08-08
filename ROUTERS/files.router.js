@@ -6,6 +6,7 @@ const { downloadFile, readfile, readfolderfils, creatfile, creatfolder, deletes,
 const mime = require('mime-types');
 
 
+
 //read all files in folder return array        
 //http://localhost:8000/files/?id=some_id&dir=some_id/folder/...<-nesessary full path with id in dir--
 router.get("/", async (req, res) => {
@@ -80,6 +81,17 @@ router.delete("/", async (req, res) => {
         res.status(400).send(error)
     }
 })
+
+
+//  -----------to-do------------
+
+// ---cut/copi/creat-folder/---
+
+
+
+
+
+
 
 router.get('/download', (req, res) => {
     res.set('Content-Type', 'image/jpeg')

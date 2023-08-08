@@ -6,7 +6,7 @@ const read = async (filterBy) => {
     return data
 }
 const readOne = async (filterBy) => {
-    let data = await usersModel.find(filterBy)
+    let data = await usersModel.findOne(filterBy)
     return data
 }
 const create = async (newData) => {

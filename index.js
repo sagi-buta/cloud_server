@@ -1,7 +1,8 @@
 require("dotenv").config()
 require('./DL/database').connect();
 
-
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const express = require('express');
 const cors = require('cors');
 
