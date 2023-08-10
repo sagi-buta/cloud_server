@@ -1,11 +1,53 @@
 const express = require('express');
 const router = express.Router();
+const { createFun, readFun, deleteFun, updateFun } = require('../BL/users.services');
+const app = express()
+
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const cookie = require('cookie-parser');
-const { createFun, readFun, deleteFun, updateFun } = require('../BL/users.services');
+app.use(cookie())
 
 
+router.post('/register', async (req, res) => {
+    try {
+
+        const { userName, email, password } = req.body
+
+        if (!(userName && email && password)) {
+            return res.status(400).send({ message: "All fields are required" })
+        }
+
+        const checkUser = await readFun({ email: email })
+
+        if (checkUser) {
+            return res.status(400).send({ message: "(email)User already exist" })
+        }
+
+        const myPassowrd = await bcrypt.hash(password, 10)
+
+        const userResolt = await createFun({
+            userName,
+            email,
+            password: myPassowrd
+        })
+
+        const token = jwt.sign(
+            { _id: userResolt._id, email },
+            "shhhh",//process.env.SECRET_...
+            { expiresIn: "2h" }
+        );
+        userResolt.token = token;
+        userResolt.password = undefined;
+
+        // res.status(201).send(userResolt);
+        res.status(201).json(userResolt);
+
+    } catch (error) {
+        console.log(error);
+        res.status(400).send(error)
+    }
+});
 router.post('/login', async (req, res) => {
     try {
 
@@ -39,44 +81,6 @@ router.post('/login', async (req, res) => {
                 token,
                 userResolt
             });
-
-    } catch (error) {
-        console.log(error);
-        res.status(400).send(error)
-    }
-})
-router.post('/register', async (req, res) => {
-    try {
-
-        const { userName, email, password } = req.body
-
-        if (!(userName && email && password)) {
-            return res.status(400).send({ message: "All fields are required" })
-        }
-
-        const checkUser = await readFun({ email: email })
-
-        if (checkUser) {
-            return res.status(400).send({ message: "(email)User already exist" })
-        }
-
-        const myPassowrd = await bcrypt.hash(password, 10)
-
-        const userResolt = await createFun({
-            userName,
-            email,
-            password: myPassowrd
-        })
-
-        const token = jwt.sign({ _id: userResolt._id, email },
-            "shhhh",//process.env.SECRET_...
-            { expiresIn: "2h" }
-        );
-        userResolt.token = token;
-        userResolt.password = undefined;
-
-        // res.status(201).send(userResolt);
-        res.status(201).json(userResolt);
 
     } catch (error) {
         console.log(error);
