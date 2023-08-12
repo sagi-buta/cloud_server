@@ -86,6 +86,17 @@ router.get('/download', (req, res) => {
     res.download(`./${req.query.dir}`)
 })
 
+router.post('/newFolder',(req,res)=>{
+    let location = req.query.location
+    let name = req.query.name
+    try {
+        creatfolder(location?location:"",name)
+        res.send(`on location ${location?location:"root"} added a new folder named: ${name}`)
+    } catch (error) {
+        console.log(error);
+        res.status(400).send(error)
+    }
+})
 
 
 
