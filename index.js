@@ -13,7 +13,6 @@ app.use(express.static('./root'))
 
 
 
-
 const maineRouter = require('./ROUTERS/main.router')
 maineRouter(app)
 
