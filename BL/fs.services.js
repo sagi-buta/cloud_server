@@ -6,8 +6,8 @@ let root = `./root/`
 //let userNow
 
 const setRoot = (id, dir) => {
-    if(!dir)throw "No permission to access"
-    if(!id)throw "No permission to access"
+    if (!dir) throw "No permission to access"
+    if (!id) throw "No permission to access"
 
 }
 
@@ -17,7 +17,7 @@ function readfile(paht) {
     if (fs.existsSync(paht)) {
         // let file = fs.readFileSync(paht, { encoding: 'utf8' });
         let file = fs.readFileSync(paht);
-        console.log("ok",file);
+        console.log("ok", file);
         return file// returns the info inside of the file
     }
     else {
@@ -32,7 +32,7 @@ function readfolderfils(folder) {
     const paht = root + folder
     if (fs.existsSync(paht) && fs.statSync(paht).isDirectory()) {
         let folderArrOrFile = fs.readdirSync(paht)
-        console.log(folderArrOrFile);
+        // console.log(folderArrOrFile);
         return folderArrOrFile
     }
     // else if (fs.existsSync) {/// optional -??- for show files
@@ -139,7 +139,7 @@ function rename(file, to) {//transfer file to new loc ||  file rename
             if (!fs.existsSync(to)) {//check if found file wite the same name in folder
 
                 fs.renameSync(file, to)// fun do
-               return readfolderfils(myTo)
+                return readfolderfils(myTo)
             }
             else {
                 console.log("the newname is exsisit, choise a difrent newname");

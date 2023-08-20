@@ -6,6 +6,17 @@ const { downloadFile, readfile, readfolderfils, creatfile, creatfolder, deletes,
 const mime = require('mime-types');
 
 
+router.use((req, res, next) => {
+    console.log('middleware');
+//    const token = req.headers.authorization.split(" ")[1];
+
+// process.env.SECRET
+    // TODO - check the token.
+    // find user by token.
+    req.user = ""
+    // req
+    next()
+})
 
 //read all files in folder return array        
 //http://localhost:8000/files/?id=some_id&dir=some_id/folder/...<-nesessary full path with id in dir--
@@ -23,12 +34,12 @@ router.get("/", async (req, res) => {
 })
 
 router.put("/rename", async (req, res) => {
-let id = req.query.id
-let dir = req.query.dir
-let dir2 = req.query.dir2
+    let id = req.query.id
+    let dir = req.query.dir
+    let dir2 = req.query.dir2
     try {
         setRoot(id, dir)
-       let infArray= rename(dir, dir2)
+        let infArray = rename(dir, dir2)
         res.send(infArray)
     } catch (error) {
         console.log(error);
@@ -98,12 +109,12 @@ router.get('/download', (req, res) => {
     res.download(`./${req.query.dir}`)
 })
 
-router.post('/newFolder',(req,res)=>{
+router.post('/newFolder', (req, res) => {
     let location = req.query.location
     let name = req.query.name
     try {
-        creatfolder(location?location:"",name)
-        res.send(`on location ${location?location:"root"} added a new folder named: ${name}`)
+        creatfolder(location ? location : "", name)
+        res.send(`on location ${location ? location : "root"} added a new folder named: ${name}`)
     } catch (error) {
         console.log(error);
         res.status(400).send(error)

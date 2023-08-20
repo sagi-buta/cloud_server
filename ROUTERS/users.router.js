@@ -65,6 +65,10 @@ router.post('/login', async (req, res) => {
                 "shhhh",//process.env.SECRET_...
                 { expiresIn: "2h" }
             );
+        //    const payload = jwt.verify(
+        //         token, 
+        //         "shhhh",//process.env.SECRET_...
+        //          )
             userResolt.token = token;
             userResolt.password = undefined;
         }
