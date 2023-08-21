@@ -7,7 +7,7 @@ const mime = require('mime-types');
 
 
 router.use((req, res, next) => {
-    console.log('middleware');
+    // console.log('middleware');
 //    const token = req.headers.authorization.split(" ")[1];
 
 // process.env.SECRET
