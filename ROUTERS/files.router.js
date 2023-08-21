@@ -34,7 +34,6 @@ let dir2 = req.query.dir2
         res.status(400).send(error)
     }
 })
-
 //http://localhost:8000/files/?id=some_id&dir=folder/...
 router.get("/one", async (req, res) => {//to show file -or- download.
     let id = req.query.id
